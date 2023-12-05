@@ -11,18 +11,26 @@ const fs = require('fs'),
     filePath = path.join(__dirname, 'install.sh');
 const ethers = require('ethers');
 const sdk = require('node-appwrite');
+const VultrNode = require('@vultr/vultr-node')
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
 require('dotenv').config() // this goes away with imports
 
 // SDKs
-const api = require('etherscan-api').init(process.env.ETHERSCAN_API);
-const mg = mailgun.client({username: 'api', key: process.env.MAILGUN_API});
+const api = require('etherscan-api').init(process.env._API_ETHERSCAN);
+const mg = mailgun.client({username: 'api', key: process.env._API_MAILGUN});
 let client = new sdk.Client();
 const databases = new sdk.Databases(client);
 client
     .setEndpoint('https://appwrite.cryptfire.io/v1') // Your API Endpoint
     .setProject('cryptfire') // Your project ID
-    .setKey(process.env.APPWRITE_API) // Your secret API key
+    .setKey(process.env._API_APPWRITE) // Your secret API key
 ;
+const vultr = VultrNode.initialize({
+  apiKey: 'your-api-key-here',
+  baseUrl: 'https://example.com', // Optional
+  rateLimit: 600 // Optional
+})
 
 // extra file
 
@@ -69,13 +77,11 @@ app.get('/', (req, res) => {
     @zdanl: https:/install.cryptfire.io/premium/start/:apikey
     Provide API Key and receive an Ethereum Wallet Address to fund
 
-    i cant further this, as the appwrite database seems shit.
-
 
 
 */
 
-app.get('/premium/start/:apikey', async (req, res) => {
+app.get('/premium/upgrade/:apikey', async (req, res) => {
   const apikey = req.params.apikey;
   if (!cryptfire_validate_apikey(apikey)) {
     res.send("invalid apikey");
@@ -100,15 +106,57 @@ app.get('/premium/start/:apikey', async (req, res) => {
     return false;
   }
 
-  const address = docs.documents[0].address;
+
+  const address = docs.documents[0].wallet;
 
   // check balance, only do this once per hour per user while we are not paying etherscan yet
-  var balance = api.account.balance(address);
+  var balance = await api.account.balance(address);
 
+  if (balance < process.env._APP_PRICE_PREMIUM) {
+    res.send('unpaid');
+    return false;
+  }
 
-  const wallet = ethers.Wallet.createRandom();
-  res.send(wallet.address);
+  const r = await databases.listDocuments('cryptfire', 'api', [
+    sdk.Query.match('key', apikey)
+  ]);
+
+  if (r.amount > 0) {
+    console.log('should update api document now');
+  }
+
+  res.send(balance.result);
 });
+
+app.get('/prices/compute', async (req, res) => {
+  const type = req.params.type;
+  fetch('https://api.coinbase.com/v2/prices/ETH-USD/buy', {
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+    },
+  })
+   .then(response => response.json())
+   .then(response => {
+      const market = response.data.amount;
+      const dev = process.env._APP_PRICE_DEV/market;
+      const prod = process.env._APP_PRICE_PROD/market;
+
+      res.json({'dev': dev, 'prod': prod});
+   })
+   .catch(err => {
+      const market = 2100;
+      const dev = market/process.env._APP_PRICE_DEV;
+      const prod = market/process.env._APP_PRICE_PROD;
+      res.json({'attention':'coinbase down, estimating', 'dev':dev, 'prod':prod});
+   })
+
+});
+
+app.get('/prices/dns', (req, res) => {
+  res.send('dns is free :) use ns1.vultr.com');
+});
+
 
 
 /*
