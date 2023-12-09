@@ -31,6 +31,29 @@ client
 
 export const databases = new sdk.Databases(client);
 
+// Decorators
+export const apikey_decorator = (req, res, next) => {
+  const api_key = req.header("x-cryptfire-api-key");
+  if (!api_key || !val_api_key(api_key)) {
+    res.send({'status': 'not ok'});
+    return false;
+  }
+
+  // retarded Appwrite API
+  const docs = databases.listDocuments('cryptfire', 'api', [
+    sdk.Query.match('api_key', [api_key])
+  ]);
+
+  if (docs.total === 0) {
+    res.send({'status': 'not ok'});
+    return false;
+  }
+
+  console.log(`api key found ${api_key}`);
+
+  next();
+};
+
 // Helper Functions
 export const gen_str = (length) => {
   if (!length) length = 15;

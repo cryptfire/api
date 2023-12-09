@@ -1,8 +1,8 @@
 import express from 'express';
 var router = express.Router();
 
-  router.get('/premium/upgrade/:apikey', async (req, res) => {
-    const apikey = req.params.apikey;
+router.get('/premium/upgrade/:apikey', async (req, res) => {
+  const apikey = req.params.apikey;
     if (!cryptfire_validate_apikey(apikey))
       res.send("invalid apikey");
 

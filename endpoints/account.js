@@ -1,4 +1,5 @@
 import { val_api_key, gen_str, mg } from '../cryptfire.js';
+import { apikey_decorator } from '../cryptfire.js';
 import crypto from 'crypto';
 
 import express from 'express';
@@ -9,15 +10,8 @@ var router = express.Router();
   Get account details
   unfinished
 */
-router.post('/', async (req, res) => {
+router.get('/', apikey_decorator, async (req, res) => {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-  const api_key = req.body.api_key;
-
-  // fix this with a decorator rather than middleware
-  if (!val_api_key(api_key)) {
-    res.send({'status': "invalid api key"});
-    return false;
-  }
 
   res.send({'status': 'ok'});
 });

@@ -5,11 +5,14 @@ import path from 'path';
 import VultrNode from '@vultr/vultr-node';
 import api from 'etherscan-api';
 import compression from "compression";
+import pretty from 'express-prettify';
 
 import { benchmark } from './endpoints/index.js';
 import { keygen } from './endpoints/index.js';
 import { wallet } from './endpoints/index.js';
 import { premium } from './endpoints/index.js';
+import { account } from './endpoints/index.js';
+import { deploy } from './endpoints/index.js';
 import { pricing } from './endpoints/index.js';
 import { support } from './endpoints/index.js';
 
@@ -22,6 +25,7 @@ const app = express();
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(pretty({query:'pretty'}));
 // Catch JSON Parse Errors
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
@@ -43,6 +47,8 @@ app.use('/keygen', keygen);
 app.use('/wallet', wallet);
 app.use('/premium', premium);
 app.use('/pricing', pricing);
+app.use('/account', account);
+app.use('/deploy', deploy);
 app.use('/support', support);
 
 // SDKs
