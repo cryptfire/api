@@ -7,6 +7,12 @@ an ENS domain, and DNS records set up and maintainable through the CLI or web in
 
 See the [Wiki](https://github.com/cryptfire/cryptfire-install-api/wiki) for instructions and details.
 
+```bash
+npm install;
+npm run build;
+pm2 start npm -- start
+```
+
 ![logo](https://github.com/cryptfire/cryptfire-install-api/assets/114028070/651d0bee-5a40-43d6-9f9c-6f0316980626)
 
 ## Endpoints
