@@ -9,11 +9,20 @@ validate_email() {
 # Ask for user's email
 read -p "Email to register with Cryptfire: " email
 
-# Validate the email
+# Request API Key with Email
 if validate_email "$email"; then
-    echo "Fetching API key..."
+    echo "Transmitting Email..."
     # Fetch and print the API key
-    curl -s "https://install.cryptfire.io/key/$email"
+    curl -X POST \
+       -H "Content-Type: application/json" \
+      -d "{'email': '$email'}" \
+      https://install.cryptfire.io/keygen
 else
     echo "Invalid email address."
 fi
+
+# Validate the Email address
+echo "Validating Email..."
+read -p "Code: " code
+# Fetch and print the API key
+curl -X GET https://install.cryptfire.io/keygen/validate/$email/$code;

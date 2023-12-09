@@ -1,12 +1,33 @@
 import crypto from 'crypto';
 import 'dotenv/config';
-
 import formData from 'form-data';
 import Mailgun from 'mailgun.js';
+import twilio from 'twilio';
+import sdk from 'node-appwrite';
+import { createClient } from 'redis';
+
+export const redis_client = await createClient()
+  .on('error', err => console.log('Redis Client Error', err))
+  .connect();
 
 // Mailgun SDK
 const mailgun = new Mailgun(formData);
 export const mg = mailgun.client({username: 'api', key: process.env._API_MAILGUN});
+
+// Twilio SDK
+const accountSid = process.env._API_TWILIO_SID;
+const authToken = process.env._API_TWILIO_SECRET;
+export const twilio_client = twilio(accountSid, authToken);
+
+export const client = new sdk.Client();
+
+client
+    .setEndpoint('https://appwrite.backbones.cryptfire.io/v1') // Your API Endpoint
+    .setProject('cryptfire') // Your project ID
+    .setKey(process.env._API_APPWRITE) // Your secret API key
+;
+
+export const databases = new sdk.Databases(client);
 
 export const gen_str = (length) => {
   if (!length) length = 15;

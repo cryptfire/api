@@ -12,6 +12,8 @@
     "expressjs.routes.autoload": "^0.2.0",
     "mailgun.js": "^9.3.0",
     "node-appwrite": "^11.1.0",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "redis": "^4.6.11",
+    "twilio": "^4.19.3"
   }
 }

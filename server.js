@@ -2,8 +2,6 @@ import express from 'express';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import { ethers } from 'ethers';
-import sdk from 'node-appwrite';
 import VultrNode from '@vultr/vultr-node';
 import api from 'etherscan-api';
 import compression from "compression";
@@ -22,6 +20,15 @@ const app = express();
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// Catch JSON Parse Errors
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        console.error(err);
+        return res.status(400).send({ status: 404, message: err.message }); // Bad request
+    }
+    next();
+});
+
 
 // Load Endpoints
 app.use('/benchmarks', benchmark);
@@ -33,15 +40,6 @@ app.use('/support', support);
 
 // SDKs
 api.init(process.env._API_ETHERSCAN);
-let client = new sdk.Client();
-
-client
-    .setEndpoint('https://appwrite.backbones.cryptfire.io/v1') // Your API Endpoint
-    .setProject('cryptfire') // Your project ID
-    .setKey(process.env._API_APPWRITE) // Your secret API key
-;
-
-const databases = new sdk.Databases(client);
 
 const vultr = VultrNode.initialize
   apiKey: process.env._API_VULTR
