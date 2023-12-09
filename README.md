@@ -1,4 +1,4 @@
-# Cryptfire install.cryptfire.io API
+# Cryptfire Open Source API
 
 This is for developers 💻 to register an API key with their email address or phone number,
 to get automated public cloud deployment of a preoptimized open source BaaS in terms of either
