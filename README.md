@@ -19,6 +19,11 @@ pm2 start npm -- start
 This is a NodeJS, MongoDB, Redis, Appwrite, ExpressJS Stack providing a high-performance API for Developers to 
 interact with Cryptfire Cloud  or a diverse set of other Clouds.
 
+Each component, including the choice of NodeJS vs. Typescript, was selected with care.
+
+![colorstack](https://github.com/cryptfire/cryptfire-install-api/assets/114028070/a74fa959-0f32-4992-b27f-8246392501f3)
+
+
 ## Endpoints
 
 | Endpoint                         | Description |
