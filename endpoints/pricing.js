@@ -1,9 +1,10 @@
 import express from 'express';
+import { apikey_decorator } from '../cryptfire.js';
 var router = express.Router();
 
 // be neither immoral nor unethical here
 
-router.get('/powerdev', async (req, res) => {
+router.get('/cryptfire', apikey_decorator, async (req, res) => {
   const type = req.params.type;
   fetch('https://api.coinbase.com/v2/prices/ETH-USD/buy', {
     method: 'GET',

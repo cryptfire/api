@@ -98,7 +98,8 @@ router.get('/validate/:email/:code', async (req, res) => {
     res.send(error);
   }
   
-    res.send({'api_key': api_key});
+  await redis_client.set(`cache_${api_key}`, email);
+  res.send({'api_key': api_key});
 });
 
 export default router;

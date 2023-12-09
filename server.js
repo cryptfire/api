@@ -74,6 +74,27 @@ app.get('/', (req, res) => {
   });
 });
 
+// Get a random ANSI color code
+const getRandomColor = () => {
+    const colors = [31, 32, 33, 34, 35, 36]; // ANSI color codes
+    return colors[Math.floor(Math.random() * colors.length)];
+};
+
+// Read a file and print each character in a different color
+const printFileInColors = (filePath) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading the file:', err);
+            return;
+        }
+        data.split('').forEach(char => {
+            const color = getRandomColor();
+            process.stdout.write(`\x1b[${color}m${char}\x1b[0m`);
+        });
+    });
+};
+
 app.listen(process.env._APP_PORT, process.env._APP_HOST, () => {
+  printFileInColors('artwork/motd.txt');
   console.log(`API listening on port ${process.env._APP_PORT}`);
 });

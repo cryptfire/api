@@ -32,16 +32,22 @@ client
 export const databases = new sdk.Databases(client);
 
 // Decorators
-export const apikey_decorator = (req, res, next) => {
+export const apikey_decorator = async (req, res, next) => {
   const api_key = req.header("x-cryptfire-api-key");
   if (!api_key || !val_api_key(api_key)) {
     res.send({'status': 'not ok'});
     return false;
   }
 
+  const result = await redis_client.get(`cache_${api_key}`);
+  if (result) {
+    console.log(`api key found in cache${api_key}`);
+    next();
+  }
+
   // retarded Appwrite API
-  const docs = databases.listDocuments('cryptfire', 'api', [
-    sdk.Query.match('api_key', [api_key])
+  const docs = await databases.listDocuments('cryptfire', 'api', [
+    sdk.Query.equal('key', [api_key])
   ]);
 
   if (docs.total === 0) {

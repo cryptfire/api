@@ -1,5 +1,5 @@
 import { val_api_key, gen_str, mg } from '../cryptfire.js';
-import { apikey_decorator } from '../cryptfire.js';
+import { apikey_decorator, databases } from '../cryptfire.js';
 import crypto from 'crypto';
 
 import express from 'express';
@@ -12,7 +12,7 @@ var router = express.Router();
 */
 router.get('/', apikey_decorator, async (req, res) => {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
+  
   res.send({'status': 'ok'});
 });
 

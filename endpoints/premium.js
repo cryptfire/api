@@ -1,7 +1,8 @@
 import express from 'express';
+import { apikey_decorator } from '../cryptfire.js';
 var router = express.Router();
 
-router.get('/premium/upgrade/:apikey', async (req, res) => {
+router.get('/premium/upgrade/:apikey', apikey_decorator, async (req, res) => {
   const apikey = req.params.apikey;
     if (!cryptfire_validate_apikey(apikey))
       res.send("invalid apikey");
@@ -41,7 +42,7 @@ router.get('/premium/upgrade/:apikey', async (req, res) => {
     res.send(balance.result);
   });
 
-  router.get('/premium/verify/:apikey', (req, res) => {
+  router.get('/premium/verify/:apikey', apikey_decorator, (req, res) => {
     const apikey = req.params.apikey;
     if (!cryptfire_validate_apikey(apikey)) 
       res.send("invalid apikey");

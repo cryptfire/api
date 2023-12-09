@@ -1,15 +1,17 @@
 import express from 'express';
+import { apikey_decorator } from '../cryptfire.js';
+
 var router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', apikey_decorator, async (req, res) => {
   res.send({'status':'ok'});
 });
 
-router.get('/create', (req, res) => {
+router.get('/create', apikey_decorator, (req, res) => {
   res.send({'ethereum':{}});
 });
 
-router.get('/reply', (req, res) => {
+router.get('/reply', apikey_decorator, (req, res) => {
   res.send({'fiat':{}});
 });
 
