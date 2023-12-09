@@ -14,6 +14,6 @@ CLI or web interface.
 | GET /                            | Register Bash Script                        |
 | GET /key/:email                  | API Key retrieval                           |
 | GET /key/validate/:email/:code   | Validate Email                              |
-| POST /deploy/:type/:project      | Deployment on Vultr and Namecheap           |
-| POST /premium/start              | Upgrade to use Cryptfire infrastructure     |
+| POST /deploy/:type/:project      | Deployment on Cryptfire Infra               |
+| POST /premium/start              | Upgrade to use Bare Metal                   |
 | POST /premium/verify             | Verify payment                              |
