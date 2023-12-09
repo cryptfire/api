@@ -5,12 +5,14 @@ import path from 'path';
 import VultrNode from '@vultr/vultr-node';
 import api from 'etherscan-api';
 import compression from "compression";
+
 import { benchmark } from './endpoints/index.js';
 import { keygen } from './endpoints/index.js';
 import { wallet } from './endpoints/index.js';
 import { premium } from './endpoints/index.js';
 import { pricing } from './endpoints/index.js';
 import { support } from './endpoints/index.js';
+
 import 'dotenv/config';
 
 // Express
@@ -29,6 +31,11 @@ app.use((err, req, res, next) => {
     next();
 });
 
+// Logging
+app.use((req, res, next) => {
+  console.log('Time:', Date.now(), 'Method:', req.method, 'Path:', req.originalUrl)
+  next()
+})
 
 // Load Endpoints
 app.use('/benchmarks', benchmark);
@@ -50,7 +57,7 @@ const vultr = VultrNode.initialize
 */
 
 app.get('/', (req, res) => {
-  fs.readFile('./install.sh', {encoding: 'utf-8'}, function(err,data){
+  fs.readFile('./bash/install.sh', {encoding: 'utf-8'}, function(err,data){
     if (!err) {
         res.writeHead(200, {'Content-Type': 'text/plain'});
         res.write(data);

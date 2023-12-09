@@ -6,6 +6,7 @@ import twilio from 'twilio';
 import sdk from 'node-appwrite';
 import { createClient } from 'redis';
 
+// Redis Client
 export const redis_client = await createClient()
   .on('error', err => console.log('Redis Client Error', err))
   .connect();
@@ -19,6 +20,7 @@ const accountSid = process.env._API_TWILIO_SID;
 const authToken = process.env._API_TWILIO_SECRET;
 export const twilio_client = twilio(accountSid, authToken);
 
+// Appwrite SDK
 export const client = new sdk.Client();
 
 client
@@ -29,6 +31,7 @@ client
 
 export const databases = new sdk.Databases(client);
 
+// Helper Functions
 export const gen_str = (length) => {
   if (!length) length = 15;
   const characterSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_';
