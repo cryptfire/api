@@ -24,20 +24,4 @@ Each component, including the choice of NodeJS vs. Typescript, was selected with
 ![colorstack](https://github.com/cryptfire/cryptfire-install-api/assets/114028070/a74fa959-0f32-4992-b27f-8246392501f3)
 
 
-## Endpoints
-
-| Endpoint                         | Description |
-| -------------------------------- | ------------------------------------------- |
-| GET /                            | Register Bash Script                        |
-| POST /keygen                     | API Key retrieval                           |
-| GET /keygen/:email/:code         | API Key retrieval                           |
-| GET /key/validate/:email/:code   | Validate Email                              |
-| POST /deploy/:type/:project      | Deployment on Cryptfire Infra               |
-| POST /premium/start              | Upgrade to use Bare Metal                   |
-| POST /premium/verify             | Verify payment                              |
-| GET  /pricing/cloud              | Public Cloud Pricing                        |
-| GET  /pricing/baremetal          | Public Baremetal Pricing                    |
-| GET  /pricing/premium            | Premium Cryptfire Cloud Pricing             |
-
-
 
